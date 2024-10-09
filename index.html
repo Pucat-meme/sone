@@ -637,49 +637,70 @@
 
     <script>
         // Function to check if user is logged in
-        function checkLoginStatus() {
-            // This is a placeholder. In a real application, you'd check with your backend or local storage.
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const loginLogoutButton = document.getElementById('loginLogout');
-            
-            if (isLoggedIn) {
-                loginLogoutButton.textContent = 'LOGOUT';
-                loginLogoutButton.href = '#';
-                loginLogoutButton.addEventListener('click', logout);
-            } else {
-                loginLogoutButton.textContent = 'LOGIN';
-                loginLogoutButton.href = 'https://sonelogin.vercel.app';
-                loginLogoutButton.removeEventListener('click', logout);
-            }
-        }
-
-        // Function to handle logout
         function logout(event) {
-            event.preventDefault();
-            // This is a placeholder. In a real application, you'd clear the session with your backend.
-            localStorage.setItem('isLoggedIn', 'false');
+        event.preventDefault();
+        
+        // Check if Google Sign-In is available
+        if (google && google.accounts && google.accounts.id) {
+            // Revoke Google authentication
+            google.accounts.id.revoke(localStorage.getItem('userEmail'), () => {
+                // Clear local storage
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userEmail');
+                
+                // Reset button state
+                checkLoginStatus();
+                
+                // Redirect to login page
+                window.location.href = 'https://sonelogin.vercel.app';
+            });
+        } else {
+            // Fallback for non-Google login
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userEmail');
             checkLoginStatus();
+            window.location.href = 'https://sonelogin.vercel.app';
         }
-
-        // Check login status when the page loads
-        document.addEventListener('DOMContentLoaded', checkLoginStatus);
-
-        // Function to handle Google Sign-In
-        function handleCredentialResponse(response) {
-            // Decode the credential response
-            const responsePayload = decodeJwtResponse(response.credential);
-            
-            console.log("ID: " + responsePayload.sub);
-            console.log('Full Name: ' + responsePayload.name);
-            console.log('Given Name: ' + responsePayload.given_name);
-            console.log('Family Name: ' + responsePayload.family_name);
-            console.log("Image URL: " + responsePayload.picture);
-            console.log("Email: " + responsePayload.email);
-            
-            // Set login status
-            localStorage.setItem('isLoggedIn', 'true');
-            checkLoginStatus();
+    }
+    
+    // Function to handle Google Sign-In
+    function handleCredentialResponse(response) {
+        const responsePayload = decodeJwtResponse(response.credential);
+        
+        // Store login state and user email
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userEmail', responsePayload.email);
+        
+        // Update login button
+        checkLoginStatus();
+    }
+    
+    // JWT decoder function
+    function decodeJwtResponse(token) {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    
+        return JSON.parse(jsonPayload);
+    }
+    
+    // Initialize Google Sign-In
+    function initializeGoogleSignIn() {
+        if (google && google.accounts && google.accounts.id) {
+            google.accounts.id.initialize({
+                client_id: '705810706993-vmncqer9d8l4o5lfr5ftieak5850qvs6.apps.googleusercontent.com', // Replace with your actual Google Client ID
+                callback: handleCredentialResponse
+            });
         }
+    }
+    
+    // Check login status when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        checkLoginStatus();
+        initializeGoogleSignIn();
+    });
         
         function decodeJwtResponse(token) {
             var base64Url = token.split('.')[1];
