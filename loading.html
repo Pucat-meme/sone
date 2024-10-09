@@ -221,6 +221,15 @@
     </div>
 
     <script>
+        // Prevent going back to this page
+        window.history.replaceState(null, '', window.location.href);
+        window.onload = function() {
+            window.history.pushState(null, '', window.location.href);
+        };
+        window.onpopstate = function() {
+            window.history.pushState(null, '', window.location.href);
+        };
+
         // Create loading particles
         const particlesContainer = document.getElementById('particles');
         for (let i = 0; i < 12; i++) {
@@ -276,9 +285,9 @@
                 loadingText.textContent = 'Ready!';
                 setTimeout(() => {
                     window.location.href = 'https://soneai.vercel.app';
-                }, 150);
+                }, 200);
             }
-        }, 50);
+        }, 80);
     </script>
 </body>
 </html>
