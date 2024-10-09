@@ -525,6 +525,9 @@
             display: none; /* Hidden by default */
             align-items: center;
             gap: 10px;
+            background: var(--card-bg);
+            padding: 8px 16px;
+            border-radius: 5px;
         }
 
         .user-profile img {
@@ -537,6 +540,7 @@
         .user-profile .user-name {
             color: var(--text-color);
             font-size: 0.9rem;
+            margin: 0 10px;
         }
 
         .logout-button {
@@ -557,6 +561,10 @@
         .logout-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #googleSignInDiv {
+            display: block; /* Shown by default */
         }
 
     </style>
@@ -582,11 +590,7 @@
                     <span class="user-name" id="user-name"></span>
                     <button class="logout-button" onclick="handleSignOut()">Logout</button>
                 </div>
-                <div id="g_id_onload"
-                     data-client_id="705810706993-vmncqer9d8l4o5lfr5ftieak5850qvs6.apps.googleusercontent.com"
-                     data-callback="handleCredentialResponse">
-                </div>
-                <div class="g_id_signin" data-type="standard"></div>
+                <div id="googleSignInDiv"></div>
             </div>
         </nav>
     </header>
@@ -683,14 +687,14 @@
     </footer>
 
     <script>
-        let auth2;
-
         function handleCredentialResponse(response) {
             const responsePayload = decodeJwtResponse(response.credential);
             
             // Update UI to show logged-in state
-            document.querySelector('.g_id_signin').style.display = 'none';
-            document.querySelector('.user-profile').style.display = 'flex';
+            document.getElementById('googleSignInDiv').style.display = 'none';
+            
+            const userProfile = document.querySelector('.user-profile');
+            userProfile.style.display = 'flex';
             
             // Update user profile information
             document.getElementById('user-image').src = responsePayload.picture;
@@ -705,18 +709,15 @@
             sessionStorage.removeItem('userCredential');
             
             // Reset UI to show login button
-            document.querySelector('.g_id_signin').style.display = 'block';
+            document.getElementById('googleSignInDiv').style.display = 'block';
             document.querySelector('.user-profile').style.display = 'none';
             
             // Clear user profile information
             document.getElementById('user-image').src = '';
             document.getElementById('user-name').textContent = '';
 
-            // Reload the Google Sign-In button
-            google.accounts.id.initialize({
-                client_id: "705810706993-vmncqer9d8l4o5lfr5ftieak5850qvs6.apps.googleusercontent.com",
-                callback: handleCredentialResponse
-            });
+            // Sign out from Google
+            google.accounts.id.disableAutoSelect();
         }
 
         function decodeJwtResponse(token) {
@@ -729,14 +730,26 @@
             return JSON.parse(jsonPayload);
         }
 
-        // Check for existing login on page load
+        // Initialize Google Sign-In
         window.onload = function() {
+            google.accounts.id.initialize({
+                client_id: "705810706993-vmncqer9d8l4o5lfr5ftieak5850qvs6.apps.googleusercontent.com",
+                callback: handleCredentialResponse
+            });
+            google.accounts.id.renderButton(
+                document.getElementById("googleSignInDiv"),
+                { theme: "outline", size: "large" }
+            );
+
+            // Check for existing login
             const storedCredential = sessionStorage.getItem('userCredential');
             if (storedCredential) {
                 handleCredentialResponse({ credential: storedCredential });
             }
         }
     </script>
+
+
 
     <script>
         function handleCredentialResponse(response) {
