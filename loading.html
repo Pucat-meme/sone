@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
     <script>
-                // Prevent back navigation
-                window.history.pushState(null, '', window.location.href);
+        // Prevent direct access to loading page
+        if (document.referrer === '') {
+            window.location.replace('https://sonelabs.vercel.app/loading.html');
+        }
+        
+        // Prevent back navigation
+        window.history.pushState(null, '', window.location.href);
         window.history.pushState(null, '', window.location.href);
         
         window.addEventListener('popstate', function() {
             window.history.forward();
             window.location.replace('https://sonelabs.vercel.app');
         });
-    </script>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading...</title>
+
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -287,7 +292,9 @@
                 clearInterval(loadingInterval);
                 loadingText.textContent = 'Ready!';
                 setTimeout(() => {
-                    window.location.href = 'https://soneai.vercel.app';
+                    // Set loading state and redirect
+                    sessionStorage.setItem('hasLoaded', 'true');
+                    window.location.replace('https://soneai.vercel.app');
                 }, 200);
             }
         }, 80);
