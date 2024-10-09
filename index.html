@@ -98,12 +98,13 @@
         nav ul {
             display: flex;
             list-style-type: none;
+            margin: 0 auto; /* Center the nav items */
         }
 
         nav ul li {
             margin-left: 20px;
         }
-        
+
         nav ul li a {
             color: var(--text-color);
             text-decoration: none;
@@ -112,21 +113,6 @@
             font-size: 0.9rem;
             border-radius: 5px;
             padding: 5px 10px;
-        }
-        
-        nav ul li a:hover {
-            color: var(--accent-color);
-        }
-        
-        @media (max-width: 768px) {
-            nav ul {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            nav ul li {
-                margin: 10px 0;
-            }
         }
 
         nav ul li a:hover {
@@ -152,6 +138,13 @@
         }
         
         @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin: 20px 0;
+            }
             
             .login-button {
                 margin-top: 10px;
@@ -522,6 +515,50 @@
         .social-links a[aria-label="LinkedIn"]::before { content: '\f0e1'; }
         .social-links a[aria-label="GitHub"]::before { content: '\f09b'; }
 
+        .auth-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-profile {
+            display: none; /* Hidden by default */
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-profile img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-profile .user-name {
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+
+        .logout-button {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            border-radius: 5px;
+            padding: 8px 16px;
+            background: var(--button-gradient);
+            background-size: 200% 200%;
+            animation: gradientAnimation 5s ease infinite;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .logout-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
     </style>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -535,12 +572,22 @@
             <div class="logo">SONE LABS</div>
             <ul>
                 <li><a href="#home">HOME</a></li>
-                <li><a href="ais.html">OUR AI'S</a></li>
                 <li><a href="#features">FEATURES</a></li>
                 <li><a href="#about">ABOUT</a></li>
                 <li><a href="#contact">CONTACT</a></li>
-                <li><a href="https://sonelogin.vercel.app" id="loginLogout">LOGIN</a></li>
             </ul>
+            <div class="auth-container">
+                <div class="user-profile">
+                    <img id="user-image" src="" alt="Profile Picture">
+                    <span class="user-name" id="user-name"></span>
+                    <button class="logout-button" onclick="handleSignOut()">Logout</button>
+                </div>
+                <div id="g_id_onload"
+                     data-client_id="705810706993-vmncqer9d8l4o5lfr5ftieak5850qvs6.apps.googleusercontent.com"
+                     data-callback="handleCredentialResponse">
+                </div>
+                <div class="g_id_signin" data-type="standard"></div>
+            </div>
         </nav>
     </header>
 
@@ -618,7 +665,7 @@
             <div class="container">
                 <h2 class="section-title">Contact Us</h2>
                 <p>Interested in learning more about our AI solutions or partnering with SONE LABS? Get in touch with us today.</p>
-                <a href="mailto:thegandharvas.suhaan@gmail.com" class="cta-button">Contact Us</a>
+                <a href="mailto:contact@sonelabs.com" class="cta-button">Contact Us</a>
             </div>
         </section>
     </main>
@@ -636,72 +683,42 @@
     </footer>
 
     <script>
-        // Function to check if user is logged in
-        function logout(event) {
-        event.preventDefault();
-        
-        // Check if Google Sign-In is available
-        if (google && google.accounts && google.accounts.id) {
-            // Revoke Google authentication
-            google.accounts.id.revoke(localStorage.getItem('userEmail'), () => {
-                // Clear local storage
-                localStorage.removeItem('isLoggedIn');
-                localStorage.removeItem('userEmail');
-                
-                // Reset button state
-                checkLoginStatus();
-                
-                // Redirect to login page
-                window.location.href = 'https://sonelogin.vercel.app';
-            });
-        } else {
-            // Fallback for non-Google login
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('userEmail');
-            checkLoginStatus();
-            window.location.href = 'https://sonelogin.vercel.app';
+        let auth2;
+
+        function handleCredentialResponse(response) {
+            const responsePayload = decodeJwtResponse(response.credential);
+            
+            // Update UI to show logged-in state
+            document.querySelector('.g_id_signin').style.display = 'none';
+            document.querySelector('.user-profile').style.display = 'flex';
+            
+            // Update user profile information
+            document.getElementById('user-image').src = responsePayload.picture;
+            document.getElementById('user-name').textContent = responsePayload.name;
+
+            // Store the credential in sessionStorage
+            sessionStorage.setItem('userCredential', response.credential);
         }
-    }
-    
-    // Function to handle Google Sign-In
-    function handleCredentialResponse(response) {
-        const responsePayload = decodeJwtResponse(response.credential);
-        
-        // Store login state and user email
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userEmail', responsePayload.email);
-        
-        // Update login button
-        checkLoginStatus();
-    }
-    
-    // JWT decoder function
-    function decodeJwtResponse(token) {
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-    
-        return JSON.parse(jsonPayload);
-    }
-    
-    // Initialize Google Sign-In
-    function initializeGoogleSignIn() {
-        if (google && google.accounts && google.accounts.id) {
+
+        function handleSignOut() {
+            // Clear the stored credential
+            sessionStorage.removeItem('userCredential');
+            
+            // Reset UI to show login button
+            document.querySelector('.g_id_signin').style.display = 'block';
+            document.querySelector('.user-profile').style.display = 'none';
+            
+            // Clear user profile information
+            document.getElementById('user-image').src = '';
+            document.getElementById('user-name').textContent = '';
+
+            // Reload the Google Sign-In button
             google.accounts.id.initialize({
-                client_id: '705810706993-vmncqer9d8l4o5lfr5ftieak5850qvs6.apps.googleusercontent.com', // Replace with your actual Google Client ID
+                client_id: "705810706993-vmncqer9d8l4o5lfr5ftieak5850qvs6.apps.googleusercontent.com",
                 callback: handleCredentialResponse
             });
         }
-    }
-    
-    // Check login status when the page loads
-    document.addEventListener('DOMContentLoaded', () => {
-        checkLoginStatus();
-        initializeGoogleSignIn();
-    });
-        
+
         function decodeJwtResponse(token) {
             var base64Url = token.split('.')[1];
             var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -710,6 +727,14 @@
             }).join(''));
         
             return JSON.parse(jsonPayload);
+        }
+
+        // Check for existing login on page load
+        window.onload = function() {
+            const storedCredential = sessionStorage.getItem('userCredential');
+            if (storedCredential) {
+                handleCredentialResponse({ credential: storedCredential });
+            }
         }
     </script>
 
