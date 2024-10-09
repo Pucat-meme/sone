@@ -4,20 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loading...</title>
-    <script>
-        // Check if we came from the main page
-        if (!sessionStorage.getItem('loadingStarted')) {
-            window.location.replace('https://sonelabs.vercel.app/ais.html'); // Replace with your main page URL
-        }
-
-        // Clear the loading started flag when leaving the page
-        window.addEventListener('beforeunload', function() {
-            sessionStorage.removeItem('loadingStarted');
-        });
-
-        // Store the previous page to handle back navigation properly
-        sessionStorage.setItem('previousPage', document.referrer);
-    </script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -289,8 +275,7 @@
                 clearInterval(loadingInterval);
                 loadingText.textContent = 'Ready!';
                 setTimeout(() => {
-                    // Clear the loading state and redirect
-                    window.location.replace('https://soneai.vercel.app');
+                    window.location.href = 'https://soneai.vercel.app';
                 }, 200);
             }
         }, 80);
