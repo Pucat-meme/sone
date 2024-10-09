@@ -19,7 +19,10 @@
             window.location.replace('https://sonelabs.vercel.app');
         });
 
-
+        // Store loading state in sessionStorage
+        if (sessionStorage.getItem('hasLoaded')) {
+            window.location.replace('https://soneai.vercel.app/');
+        }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
