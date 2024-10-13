@@ -1,873 +1,150 @@
 <!DOCTYPE html>
-<!-- saved from url=(0028)https://sonelabs.vercel.app/ -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+<html lang="en">
+  
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SONE LABS - Next-Gen AI Solutions</title>
-    <link href="./sone_files/css2" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #0a0a0a;
-            --text-color: #ffffff;
-            --accent-color: #00ffff;
-            --secondary-accent: #ff00ff;
-            --input-bg: rgba(255, 255, 255, 0.1);
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --button-gradient: linear-gradient(45deg, var(--accent-color), var(--secondary-accent));
-        }
-
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        .page-border {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border: 4px solid transparent;
-            margin: 1px;
-            border-image: var(--button-gradient);
-            border-image-slice: 1;
-            pointer-events: none;
-            z-index: 9999;
-            animation: gradientAnimation 10s ease infinite;
-            border-radius: 20px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        header {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            position: fixed;
-            width: 100%;
-            z-index: 1000;
-            transition: all 0.3s ease;
-            border-radius: 0 0 20px 20px;
-        }
-
-        header.scrolled {
-            background: rgba(0, 0, 0, 0.8);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: var(--button-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            background-size: 200% 200%;
-            animation: gradientAnimation 5s ease infinite;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-radius: 10px;
-            padding: 5px 10px;
-        }
-
-        nav ul {
-            display: flex;
-            list-style-type: none;
-        }
-
-        nav ul li {
-            margin-left: 20px;
-        }
-
-        nav ul li a {
-            color: var(--text-color);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-            font-size: 0.9rem;
-            border-radius: 5px;
-            padding: 5px 10px;
-        }
-
-        nav ul li a:hover {
-            color: var(--accent-color);
-        }
-
-        .hero {
-            position: relative;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            overflow: hidden;
-        }
-
-        #hero-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            padding: 40px;
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), 0 0 40px rgba(255, 0, 255, 0.3);
-            backdrop-filter: (10px);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .hero p {
-            font-size: 1rem;
-            max-width: 600px;
-            margin: 0 auto 30px;
-            font-weight: 300;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 12px 24px;
-            background: var(--button-gradient);
-            color: var(--text-color);
-            text-decoration: none;
-            border-radius: 30px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            background-size: 200% 200%;
-            animation: gradientAnimation 5s ease infinite;
-            position: relative;
-            overflow: hidden;
-            font-size: 0.9rem;
-        }
-
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: var(--button-gradient);
-            z-index: -1;
-            filter: blur(10px);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .cta-button:hover::before {
-            opacity: 1;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .section {
-            padding: 60px 0;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            margin-bottom: 40px;
-            text-align: center;
-            background: var(--button-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            background-size: 200% 200%;
-            animation: gradientAnimation 5s ease infinite;
-        }
-
-        .features {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .feature-card {
-            flex-basis: calc(50% - 10px);
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 20px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: var(--button-gradient);
-            z-index: -1;
-            filter: blur(10px);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .feature-card:hover::before {
-            opacity: 0.5;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .feature-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            color: var(--text-color);
-        }
-
-        .about {
-            background: var(--bg-color);
-            color: white;
-        }
-
-        .about-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 30px;
-        }
-
-        .about-text {
-            flex-basis: 50%;
-        }
-
-        .about-image {
-            flex-basis: 40%;
-        }
-
-        .about-image img {
-            width: 100%;
-            border-radius: 20px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .about-text p {
-            background: var(--button-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            background-size: 200% 200%;
-            animation: gradientAnimation 5s ease infinite;
-        }
-
-        footer {
-            background: var(--bg-color);
-            padding: 30px 0;
-            text-align: center;
-        }
-
-        .social-links {
-            margin-bottom: 20px;
-        }
-
-        .social-links a {
-            color: var(--text-color);
-            font-size: 1.5rem;
-            margin: 0 10px;
-            transition: color 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            line-height: 40px;
-            text-align: center;
-            border-radius: 50%;
-            background: var(--card-bg);
-        }
-
-        .social-links a:hover {
-            color: var(--accent-color);
-            background: var(--button-gradient);
-        }
-
-        .ai-cards {
-    display: flex;
-    flex-direction: column; /* Stack cards vertically */
-    gap: 30px; /* Space between cards */
-    margin-bottom: 30px;
-}
-
-.ai-card {
-    flex-basis: auto; /* Allow the card to take its content height */
-
-
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ai-card::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: var(--button-gradient);
-            z-index: -1;
-            filter: blur(10px);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .ai-card:hover::before {
-            opacity: 0.5;
-        }
-
-        .ai-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .ai-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            color: var(--text-color);
-        }
-
-        .ai-card .cta-button {
-            margin-top: 15px;
-        }
-
-        @media (max-width: 768px) {
-            .hero-content {
-                padding: 0 10px;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 0.9rem;
-            }
-
-            .feature-card, .ai-card {
-                flex-basis: 100%;
-            }
-
-            .about-content {
-                flex-direction: column;
-            }
-
-            .about-text, .about-image {
-                flex-basis: 100%;
-            }
-
-            .section {
-                padding: 40px 0;
-            }
-
-            .section-title {
-                font-size: 1.8rem;
-                margin-bottom: 30px;
-            }
-
-            nav ul {
-                display: none;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo {
-                font-size: 1.2rem;
-            }
-
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            .hero p {
-                font-size: 0.8rem;
-            }
-
-            .cta-button {
-                padding: 10px 20px;
-                font-size: 0.8rem;
-            }
-
-            .feature-card, .ai-card {
-                padding: 15px;
-            }
-
-            .feature-card h3, .ai-card h3 {
-                font-size: 1rem;
-            }
-        }
-
-        #contact {
-            background: var(--bg-color);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-        }
-
-        #contact p {
-            max-width: 600px;
-            margin: 0 auto 30px;
-            font-size: 1.1rem;
-        }
-
-        #contact .cta-button {
-            font-size: 1rem;
-            padding: 15px 30px;
-        }
-
-        @font-face {
-            font-family: 'FontAwesome';
-            src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/webfonts/fa-brands-400.woff2') format('woff2');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
-
-        .social-links a::before {
-            font-family: 'FontAwesome';
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        .social-links a[aria-label="Facebook"]::before { content: '\f09a'; }
-        .social-links a[aria-label="Twitter"]::before { content: '\f099'; }
-        .social-links a[aria-label="LinkedIn"]::before { content: '\f0e1'; }
-        .social-links a[aria-label="GitHub"]::before { content: '\f09b'; }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style-type: none;
-        }
-        
-        nav ul li {
-            margin-left: 20px;
-        }
-        
-        nav ul li a {
-            color: var(--text-color);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-            font-size: 0.9rem;
-            border-radius: 5px;
-            padding: 5px 10px;
-        }
-        
-        nav ul li a:hover {
-            color: var(--accent-color);
-        }
-        
-        @media (max-width: 768px) {
-            nav ul {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            nav ul li {
-                margin: 10px 0;
-            }
-        }
-
-        .profile-button {
-        display: none; /* Hidden by default */
-        position: relative;
-        cursor: pointer;
-    }
-
-    .profile-button img {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .profile-dropdown {
-        display: none;
-        position: absolute;
-        right: 0;
-        top: 100%;
-        background: var(--card-bg);
-        border-radius: 5px;
-        padding: 10px;
-        z-index: 1000;
-    }
-
-    .profile-dropdown.show {
-        display: block;
-    }
-
-    .profile-dropdown button {
-        background: none;
-        border: none;
-        color: var(--text-color);
-        cursor: pointer;
-        padding: 5px 10px;
-        width: 100%;
-        text-align: left;
-    }
-
-    .profile-dropdown button:hover {
-        background: rgba(255, 255, 255, 0.1);
-    }
-
-    </style>
+    <title>SONE LABS</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-    <div class="page-border"></div>
-    <header>
-        <nav class="container">
-            <div class="logo">SONE LABS</div>
-            <ul>
-                <li><a href="#home">HOME</a></li>
-                <li><a href="#features">FEATURES</a></li>
-                <li><a href="#about">ABOUT</a></li>
-                <li><a href="#contact">CONTACT</a></li>
-            </ul>
-            <div class="auth-container">
-                <div id="googleSignInDiv"></div>
-                <div class="profile-button" id="profileButton">
-                    <img id="userImage" src="" alt="Profile Picture">
-                    <div class="profile-dropdown" id="profileDropdown">
-                        <button onclick="handleSignOut()">Logout</button>
+    <div class="min-h-screen bg-dark text-white">
+        <div id="border-animation"></div>
+
+        <header id="header">
+            <nav class="container">
+                <div id="logo"><a href="https://sonelabs.vercel.app">SONE LABS</div></a>
+                <div id="nav-links" class="hidden-mobile">
+                    <a href="https://sonelabs.vercel.app/" class="nav-link">HOME</a>
+                    <a href="https://sonelabs.vercel.app/ais.html" class="nav-link">OUR AI'S</a>
+                    <a href="#features" class="nav-link">FEATURES</a>
+                    <a href="#about" class="nav-link">ABOUT</a>
+                    <a href="#contact" class="nav-link">CONTACT</a>
+                </div>
+                <button id="menu-toggle" class="visible-mobile">
+                    <span class="menu-icon"></span>
+                </button>
+            </nav>
+        </header>
+
+        <div id="mobile-menu" class="hidden">
+            <a href="https://sonelabs.vercel.app" class="mobile-nav-link">HOME</a>
+            <a href="https://sonelabs.vercel.app/ais.html" class="mobile-nav-link">OUR AI'S</a>
+            <a href="#features" class="mobile-nav-link">FEATURES</a>
+            <a href="#about" class="mobile-nav-link">ABOUT</a>
+            <a href="#contact" class="mobile-nav-link">CONTACT</a>
+        </div>
+
+        <main>
+            <section id="home" class="section">
+                <canvas id="animation-canvas"></canvas>
+                <div id="hero-content" class="hero-visible">
+                    <h1>Welcome to SONE LABS</h1>
+                    <p>Pioneering the future of AI with innovative solutions that transform industries and enrich lives.</p>
+                    <button class="cta-button">Explore Our Vision</button>
+                </div>
+                <div id="scroll-indicator">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 9L12 15L18 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </section>
+
+            <section id="features" class="section">
+                <div class="container">
+                    <h2 class="section-title">Our AI Solutions</h2>
+                    <div class="ai-cards">
+                        <div class="ai-card">
+                            <h3>SONE AI 1.1</h3>
+                            <p>Advanced natural language processing and cognitive abilities for complex queries. Real-time data integration for smarter decision-making. Continuously improving, personalized experience.</p>
+                            <a href="https://sonelabs.vercel.app/loading.html" class="cta-button">Try SONE 1.1</a>
+                        </div>
+                        <div class="ai-card">
+                            <h3>SONE AI 2.0</h3>
+                            <p>Next-generation AI model with revolutionary capabilities. Redefining technology interaction. Unparalleled advancements in understanding, problem-solving, and automation.</p>
+                            <p><strong>Coming Soon</strong></p>
+                        </div>
+                    </div>
+                    <h2 class="section-title">Our Innovations</h2>
+                    <div class="features">
+                        <div class="feature-card">
+                            <h3>Cognitive Computing</h3>
+                            <p>Advanced AI systems for complex problem-solving and data analysis.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3>Adaptive Intelligence</h3>
+                            <p>AI that evolves and adapts in real-time for accurate, contextual responses.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3>Quantum AI Integration</h3>
+                            <p>Quantum-enhanced AI algorithms for revolutionary data processing.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3>Ethical AI Framework</h3>
+                            <p>Responsible and transparent AI decision-making processes.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3>Neuro-Symbolic AI</h3>
+                            <p>Combine the strengths of neural networks and symbolic AI to create more interpretable and robust AI systems for critical applications.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3>Seamless Integration</h3>
+                            <p>Effortlessly integrate our cutting-edge AI solutions into your existing infrastructure, enhancing productivity across your organization.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </nav>
-    </header>
+            </section>
 
-    <main>
-        <section id="home" class="hero">
-            <canvas id="hero-canvas" width="1280" height="638" style="width: 1280px; height: 638px;"></canvas>
-            <div class="hero-content">
-                <h1>Welcome to SONE LABS</h1>
-                <p>Pioneering the future of AI with innovative solutions that transform industries and enrich lives.</p>
-                <a href="https://sonelabs.vercel.app/#contact" class="cta-button">Explore Our Vision</a>
-            </div>
-        </section>
-
-        <section id="features" class="section">
-            <div class="container">
-                <h2 class="section-title">Our AI Solutions</h2>
-                <div class="ai-cards">
-                    <div class="ai-card">
-                        <h3>SONE AI 1.1</h3>
-                        <p>Advanced natural language processing and cognitive abilities for complex queries. Real-time data integration for smarter decision-making. Continuously improving, personalized experience.</p>
-                        <a href="https://sonelabs.vercel.app/loading.html" class="cta-button">Try SONE 1.1</a>
-                    </div>
-                    <div class="ai-card">
-                        <h3>SONE AI 2.0</h3>
-                        <p>Next-generation AI model with revolutionary capabilities. Redefining technology interaction. Unparalleled advancements in understanding, problem-solving, and automation.</p>
-                        <p><strong>Coming Soon</strong></p>
-                    </div>
-                </div>
-                <h2 class="section-title">Our Innovations</h2>
-                <div class="features">
-                    <div class="feature-card">
-                        <h3>Cognitive Computing</h3>
-                        <p>Advanced AI systems for complex problem-solving and data analysis.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>Adaptive Intelligence</h3>
-                        <p>AI that evolves and adapts in real-time for accurate, contextual responses.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>Quantum AI Integration</h3>
-                        <p>Quantum-enhanced AI algorithms for revolutionary data processing.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>Ethical AI Framework</h3>
-                        <p>Responsible and transparent AI decision-making processes.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>Neuro-Symbolic AI</h3>
-                        <p>Combine the strengths of neural networks and symbolic AI to create more interpretable and robust AI systems for critical applications.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>Seamless Integration</h3>
-                        <p>Effortlessly integrate our cutting-edge AI solutions into your existing infrastructure, enhancing productivity across your organization.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="about" class="section about">
-            <div class="container">
+            <section id="about" class="section">
                 <h2 class="section-title">About SONE LABS</h2>
                 <div class="about-content">
-                    <div class="about-text">
+                    <div id="animation-canvas"></div>
+                    <div id="about-text" class="about-text">
                         <p>At SONE LABS, we're dedicated to pushing the boundaries of artificial intelligence. Our team of visionary scientists and engineers work tirelessly to create AI solutions that not only solve today's challenges but anticipate tomorrow's needs.</p>
                         <p>With a focus on ethical AI development and a commitment to innovation, we're shaping a future where technology and humanity thrive in harmony.</p>
                     </div>
-                    <div class="about-image">
-                        <img src="./sone_files/photo-1485827404703-89b55fcc595e" alt="SONE LABS Team">
-                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="contact" class="section">
-            <div class="container">
-                <h2 class="section-title">Contact Us</h2>
+            <section id="contact" class="section">
+                <h2>Contact Us</h2>
                 <p>Interested in learning more about our AI solutions or partnering with SONE LABS? Get in touch with us today.</p>
-                <a href="mailto:contact@sonelabs.com" class="cta-button">Contact Us</a>
+                <button class="cta-button">Contact Us</button>
+            </section>
+        </main>
+
+        <footer>
+            <div class="container">
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 2H15C13.6739 2 12.4021 2.52678 11.4645 3.46447C10.5268 4.40215 10 5.67392 10 7V10H7V14H10V22H14V14H17L18 10H14V7C14 6.73478 14.1054 6.48043 14.2929 6.29289C14.4804 6.10536 14.7348 6 15 6H18V2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Twitter">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M23 3C22.0424 3.67548 20.9821 4.19211 19.86 4.53C19.2577 3.83751 18.4573 3.34669 17.567 3.12393C16.6767 2.90116 15.7395 2.95722 14.8821 3.28445C14.0247 3.61168 13.2884 4.19439 12.773 4.95372C12.2575 5.71305 11.9877 6.61234 12 7.53V8.53C10.2426 8.57557 8.50127 8.18581 6.93101 7.39545C5.36074 6.60508 4.01032 5.43864 3 4C3 4 -1 13 8 17C5.94053 18.398 3.48716 19.0989 1 19C10 24 21 19 21 7.5C20.9991 7.22145 20.9723 6.94359 20.92 6.67C21.9406 5.66349 22.6608 4.39271 23 3Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="LinkedIn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 8C17.5913 8 19.1174 8.63214 20.2426 9.75736C21.3679 10.8826 22 12.4087 22 14V21H18V14C18 13.4696 17.7893 12.9609 17.4142 12.5858C17.0391 12.2107 16.5304 12 16 12C15.4696 12 14.9609 12.2107 14.5858 12.5858C14.2107 12.9609 14 13.4696 14 14V21H10V14C10 12.4087 10.6321 10.8826 11.7574 9.75736C12.8826 8.63214 14.4087 8 16 8Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M6 9H2V21H6V9Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M4 6C5.10457 6 6 5.10457 6 4C6 2.89543 5.10457 2 4 2C2.89543 2 2 2.89543 2 4C2 5.10457 2.89543 6 4 6Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="GitHub">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 19C4 20.5 4 16.5 2 16M16 22V18.13C16.0375 17.6532 15.9731 17.1738 15.811 16.7238C15.6489 16.2738 15.3929 15.8634 15.06 15.52C18.2 15.17 21.5 13.98 21.5 8.52C21.4997 7.12383 20.9627 5.7812 20 4.77C20.4559 3.54851 20.4236 2.19835 19.91 0.999999C19.91 0.999999 18.73 0.649999 16 2.48C13.708 1.85882 11.292 1.85882 9 2.48C6.27 0.649999 5.09 0.999999 5.09 0.999999C4.57638 2.19835 4.54414 3.54851 5 4.77C4.03013 5.7887 3.49252 7.14346 3.5 8.55C3.5 13.97 6.8 15.16 9.94 15.55C9.611 15.89 9.35726 16.2954 9.19531 16.7399C9.03335 17.1844 8.96681 17.6581 9 18.13V22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                </div>
+                <p>© 2024 SONE LABS. All rights reserved.</p>
             </div>
-        </section>
-    </main>
+        </footer>
+    </div>
 
-    <footer>
-        <div class="container">
-            <div class="social-links">
-                <a href="https://sonelabs.vercel.app/" aria-label="Facebook"></a>
-                <a href="https://sonelabs.vercel.app/" aria-label="Twitter"></a>
-                <a href="https://sonelabs.vercel.app/" aria-label="LinkedIn"></a>
-                <a href="https://sonelabs.vercel.app/" aria-label="GitHub"></a>
-            </div>
-            <p>© 2024 SONE LABS. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script src="./sone_files/three.min.js.download"></script>
-    <script>
-// Hero Animation
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('hero-canvas'), alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-
-// Create particles
-const particlesGeometry = new THREE.BufferGeometry();
-const particlesCount = 1000;
-const posArray = new Float32Array(particlesCount * 3);
-
-for(let i = 0; i < particlesCount * 3; i++) {
-    posArray[i] = (Math.random() - 0.5) * 5;
-}
-
-particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-
-// Create circular texture for particles
-const createCircleTexture = () => {
-    const canvas = document.createElement('canvas');
-    const size = 64;
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext('2d');
-    
-    // Create gradient
-    const gradient = ctx.createRadialGradient(
-        size/2, size/2, 0,
-        size/2, size/2, size/2
-    );
-    
-    gradient.addColorStop(0, '#00ffff'); // Cyan at center
-    gradient.addColorStop(0.5, '#ff00ff'); // Magenta mid
-    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)'); // Transparent at edge
-    
-    // Draw circle
-    ctx.fillStyle = gradient;
-    ctx.beginPath();
-    ctx.arc(size/2, size/2, size/2, 0, Math.PI * 2);
-    ctx.fill();
-    
-    return new THREE.CanvasTexture(canvas);
-};
-
-const particleTexture = createCircleTexture();
-const particlesMaterial = new THREE.PointsMaterial({
-    size: 0.02,
-    map: particleTexture,
-    transparent: true,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false,
-});
-
-const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-scene.add(particlesMesh);
-
-// Create circular animation
-const circleGeometry = new THREE.CircleGeometry(0.0, 64);
-const circleMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true });
-const circle = new THREE.Mesh(circleGeometry, circleMaterial);
-scene.add(circle);
-
-// Create orbiting particles
-const orbitingParticles = [];
-for(let i = 0; i < 5; i++) {
-    const particle = new THREE.Mesh(
-        new THREE.SphereGeometry(0.0, 32, 32),
-        new THREE.MeshBasicMaterial({ color: 0xff00ff })
-    );
-    particle.position.x = Math.cos(i / 5 * Math.PI * 2) * 0.5;
-    particle.position.y = Math.sin(i / 5 * Math.PI * 2) * 0.5;
-    orbitingParticles.push(particle);
-    scene.add(particle);
-}
-
-camera.position.z = 1;
-
-function animate() {
-    requestAnimationFrame(animate);
-
-    // Rotate particles
-    particlesMesh.rotation.x += 0.0005;
-    particlesMesh.rotation.y += 0.0005;
-
-    // Rotate circle
-    circle.rotation.z += 0.005;
-
-    // Rotate orbiting particles
-    orbitingParticles.forEach((particle, index) => {
-        const angle = Date.now() * 0.001 + index * Math.PI * 0.4;
-        particle.position.x = Math.cos(angle) * 0.5;
-        particle.position.y = Math.sin(angle) * 0.5;
-    });
-
-    renderer.render(scene, camera);
-}
-
-animate();
-
-// Handle window resize
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});
-    </script>
-
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script>
-        function handleCredentialResponse(response) {
-            const responsePayload = decodeJwtResponse(response.credential);
-            
-            // Update UI to show logged-in state
-            document.getElementById('googleSignInDiv').style.display = 'none';
-            
-            const profileButton = document.getElementById('profileButton');
-            profileButton.style.display = 'block';
-            
-            // Update user profile information
-            document.getElementById('userImage').src = responsePayload.picture;
-    
-            // Store the credential in sessionStorage
-            sessionStorage.setItem('userCredential', response.credential);
-        }
-    
-        function handleSignOut() {
-            // Clear the stored credential
-            sessionStorage.removeItem('userCredential');
-            
-            // Reset UI to show login button
-            document.getElementById('googleSignInDiv').style.display = 'block';
-            document.getElementById('profileButton').style.display = 'none';
-            
-            // Clear user profile information
-            document.getElementById('userImage').src = '';
-    
-            // Sign out from Google
-            google.accounts.id.disableAutoSelect();
-    
-            // Hide dropdown
-            document.getElementById('profileDropdown').classList.remove('show');
-        }
-    
-        // Toggle dropdown
-        document.getElementById('profileButton').addEventListener('click', function(event) {
-            event.stopPropagation();
-            document.getElementById('profileDropdown').classList.toggle('show');
-        });
-    
-        // Close dropdown when clicking outside
-        window.addEventListener('click', function() {
-            document.getElementById('profileDropdown').classList.remove('show');
-        });
-    
-        function decodeJwtResponse(token) {
-            var base64Url = token.split('.')[1];
-            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-        
-            return JSON.parse(jsonPayload);
-        }
-    
-        // Initialize Google Sign-In
-        window.onload = function() {
-            google.accounts.id.initialize({
-                client_id: "705810706993-vmncqer9d8l4o5lfr5ftieak5850qvs6.apps.googleusercontent.com",
-                callback: handleCredentialResponse
-            });
-            google.accounts.id.renderButton(
-                document.getElementById("googleSignInDiv"),
-                { theme: "outline", size: "large" }
-            );
-    
-            // Check for existing login
-            const storedCredential = sessionStorage.getItem('userCredential');
-            if (storedCredential) {
-                handleCredentialResponse({ credential: storedCredential });
-            }
-        }
-    </script>
-    
-
-
-
-
-</body></html>
+    <script src="script.js"></script>
+</body>
+</html>
